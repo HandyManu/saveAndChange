@@ -1,29 +1,24 @@
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
-import useFetchUser from "../../hooks/useFetchUsers"; // 🆕
 
-const CardUser = ({ user }) => {
-  const { setNombre, setEdad, setCorreo, handleEliminar, handleActualizar } = useFetchUser();
-
-  const prepararActualizacion = () => {
-    setNombre(user.nombre);
-    setEdad(user.edad.toString());
-    setCorreo(user.correo);
-    handleActualizar(user.id); // 🆕
-  };
-
+const CardUser = ({ user, onDelete, onEdit }) => {
   return (
     <View style={styles.card}>
       <Text style={styles.cardTitle}>{user.nombre}</Text>
       <Text style={styles.cardText}>Edad: {user.edad}</Text>
       <Text style={styles.cardText}>Correo: {user.correo}</Text>
 
-      {/* 🔧 Botones añadidos */}
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.deleteButton} onPress={() => handleEliminar(user.id)}>
+        <TouchableOpacity 
+          style={styles.deleteButton} 
+          onPress={() => onDelete(user.id)}
+        >
           <Text style={styles.buttonText}>Eliminar</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.updateButton} onPress={prepararActualizacion}>
-          <Text style={styles.buttonText}>Actualizar</Text>
+        <TouchableOpacity 
+          style={styles.updateButton} 
+          onPress={() => onEdit(user)}
+        >
+          <Text style={styles.buttonText}>Editar</Text>
         </TouchableOpacity>
       </View>
     </View>

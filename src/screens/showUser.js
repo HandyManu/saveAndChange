@@ -8,26 +8,32 @@ import {
   SafeAreaView,
 } from "react-native";
 import CardUser from "../components/users/CardUser";
- 
 import useFetchUser from "../hooks/useFetchUsers";
- 
-const ShowUser = () => {
-  const { usuarios, loading } = useFetchUser();
-  console.log(usuarios);
- 
+
+const ShowUser = ({ navigation }) => {
+  const { usuarios, loading, handleEliminar, prepararActualizacion } = useFetchUser();
+
+  const handleEditUser = (user) => {
+    // Navegar a la pantalla de edición (AddUser) con los datos del usuario
+    navigation.navigate('AddUser', { 
+      userToEdit: user,
+      isEditing: true 
+    });
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Lista de Usuarios</Text>
       <Text style={styles.subtitle}>
         Consulta los usuarios registrados desde la API
       </Text>
- 
+
       {!loading && (
         <Text style={styles.counterText}>
           Total de usuarios: {usuarios.length}
         </Text>
       )}
- 
+
       {loading ? (
         <ActivityIndicator
           size="large"
@@ -36,16 +42,22 @@ const ShowUser = () => {
         />
       ) : (
         <FlatList
-          data={usuarios}
+          data={usuarios.filter(user => user && user.id != null)}
           keyExtractor={(user) => user.id.toString()}
-          renderItem={({ item }) => <CardUser user={item} />}
+          renderItem={({ item }) => (
+            <CardUser 
+              user={item} 
+              onDelete={handleEliminar}
+              onEdit={handleEditUser}
+            />
+          )}
           contentContainerStyle={styles.listContainer}
         />
       )}
     </SafeAreaView>
   );
 };
- 
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -77,27 +89,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginBottom: 10,
   },
-  card: {
-    backgroundColor: "#FFF",
-    borderRadius: 12,
-    padding: 20,
-    marginVertical: 10,
-    elevation: 4,
-    shadowColor: "#000",
-    shadowOpacity: 0.2,
-    shadowOffset: { width: 1, height: 2 },
-    shadowRadius: 4,
-  },
-  cardTitle: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "#5C3D2E",
-    marginBottom: 5,
-  },
-  cardText: {
-    fontSize: 16,
-    color: "#3B2C24",
-  },
 });
- 
+
 export default ShowUser;

@@ -1,17 +1,15 @@
- import React from 'react';
+import React from 'react';
 import {
   View,
   Text,
   TextInput,
   StyleSheet,
   TouchableOpacity,
-  Alert,
   ScrollView
 } from 'react-native';
- 
 import useFetchUser from '../hooks/useFetchUsers';
- 
-const AddUser = () => {
+
+const AddUser = ({ navigation }) => {
   const {
     nombre,
     edad,
@@ -19,16 +17,37 @@ const AddUser = () => {
     setNombre,
     setEdad,
     setCorreo,
-    handleGuardar
+    handleGuardar,
+    handleActualizar,
+    cancelarEdicion,
+    editingId
   } = useFetchUser();
- 
+
+  const handleSubmit = () => {
+    if (editingId) {
+      handleActualizar();
+    } else {
+      handleGuardar();
+    }
+  };
+
+  const handleCancel = () => {
+    cancelarEdicion();
+    navigation.goBack();
+  };
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>Agregar Usuario</Text>
-      <Text style={styles.subtitle}>
-        Ingresa la información del nuevo usuario
+      <Text style={styles.title}>
+        {editingId ? 'Actualizar Usuario' : 'Agregar Usuario'}
       </Text>
- 
+      <Text style={styles.subtitle}>
+        {editingId 
+          ? 'Modifica la información del usuario' 
+          : 'Ingresa la información del nuevo usuario'
+        }
+      </Text>
+
       <TextInput
         style={styles.input}
         placeholder="Nombre"
@@ -52,14 +71,22 @@ const AddUser = () => {
         keyboardType="email-address"
         placeholderTextColor="#A1866F"
       />
- 
-      <TouchableOpacity style={styles.button} onPress={handleGuardar}>
-        <Text style={styles.buttonText}>Guardar</Text>
+
+      <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+        <Text style={styles.buttonText}>
+          {editingId ? 'Actualizar' : 'Guardar'}
+        </Text>
       </TouchableOpacity>
+
+      {editingId && (
+        <TouchableOpacity style={styles.cancelButton} onPress={handleCancel}>
+          <Text style={styles.cancelButtonText}>Cancelar</Text>
+        </TouchableOpacity>
+      )}
     </ScrollView>
   );
 };
- 
+
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
@@ -102,7 +129,19 @@ const styles = StyleSheet.create({
     color: '#FFF',
     fontWeight: 'bold',
     textAlign: 'center'
+  },
+  cancelButton: {
+    backgroundColor: '#A94438',
+    padding: 15,
+    borderRadius: 10,
+    width: '100%',
+    marginTop: 10
+  },
+  cancelButtonText: {
+    color: '#FFF',
+    fontWeight: 'bold',
+    textAlign: 'center'
   }
 });
- 
+
 export default AddUser;
