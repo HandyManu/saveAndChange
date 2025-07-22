@@ -1,46 +1,36 @@
-import { StyleSheet, Text, View } from "react-native";
- 
-const CardUser = ({user}) => {
+import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import useFetchUser from "../../hooks/useFetchUsers"; // 🆕
+
+const CardUser = ({ user }) => {
+  const { setNombre, setEdad, setCorreo, handleEliminar, handleActualizar } = useFetchUser();
+
+  const prepararActualizacion = () => {
+    setNombre(user.nombre);
+    setEdad(user.edad.toString());
+    setCorreo(user.correo);
+    handleActualizar(user.id); // 🆕
+  };
+
   return (
-        <View style={styles.card}>
-          <Text style={styles.cardTitle}>{user.nombre}</Text>
-          <Text style={styles.cardText}>Edad: {user.edad}</Text>
-          <Text style={styles.cardText}>Correo: {user.correo}</Text>
-        </View>
-   );
-}
- 
+    <View style={styles.card}>
+      <Text style={styles.cardTitle}>{user.nombre}</Text>
+      <Text style={styles.cardText}>Edad: {user.edad}</Text>
+      <Text style={styles.cardText}>Correo: {user.correo}</Text>
+
+      {/* 🔧 Botones añadidos */}
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity style={styles.deleteButton} onPress={() => handleEliminar(user.id)}>
+          <Text style={styles.buttonText}>Eliminar</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.updateButton} onPress={prepararActualizacion}>
+          <Text style={styles.buttonText}>Actualizar</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+};
+
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#EAD8C0',
-    paddingHorizontal: 20,
-    paddingTop: 40
-  },
-  listContainer: {
-    paddingBottom: 30,
-  },
-  title: {
-    fontSize: 26,
-    fontWeight: 'bold',
-    color: '#5C3D2E',
-    textAlign: 'center',
-    marginBottom: 5
-  },
-  subtitle: {
-    fontSize: 16,
-    fontWeight: '500',
-    color: '#5C3D2E',
-    textAlign: 'center',
-    marginBottom: 10
-  },
-  counterText: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#3B2C24',
-    textAlign: 'center',
-    marginBottom: 10
-  },
   card: {
     backgroundColor: '#FFF',
     borderRadius: 12,
@@ -61,7 +51,31 @@ const styles = StyleSheet.create({
   cardText: {
     fontSize: 16,
     color: '#3B2C24'
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 10
+  },
+  deleteButton: {
+    backgroundColor: '#A94438',
+    padding: 10,
+    borderRadius: 8,
+    flex: 1,
+    marginRight: 5
+  },
+  updateButton: {
+    backgroundColor: '#3B7D63',
+    padding: 10,
+    borderRadius: 8,
+    flex: 1,
+    marginLeft: 5
+  },
+  buttonText: {
+    color: '#FFF',
+    textAlign: 'center',
+    fontWeight: 'bold'
   }
 });
- 
+
 export default CardUser;
