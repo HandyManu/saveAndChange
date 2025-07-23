@@ -32,6 +32,9 @@ const TabNavigator = () => {
               } else if (route.name === 'AddUser') {
                        iconName = focused ? 'person-add' : 'person-add-outline';
               }
+              else if (route.name === 'UpdateUser') {
+                iconName = focused ? 'create' : 'create-outline';
+              }
               return <Ionicons name={iconName} color={color} size={size} />;
             },
           })}
@@ -50,6 +53,11 @@ const TabNavigator = () => {
         name="AddUser"
         component={AddUser}
         options={{ title: 'AddUser' }}
+      />
+      <Tab.Screen
+        name="UpdateUser"
+        component={UpdateUser}
+        options={{ title: 'UpdateUser' }}
       />
     </Tab.Navigator>
     );

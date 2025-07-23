@@ -9,15 +9,23 @@ import {
 } from "react-native";
 import CardUser from "../components/users/CardUser";
 import useFetchUser from "../hooks/useFetchUsers";
+import { useFocusEffect } from '@react-navigation/native';
+
 
 const ShowUser = ({ navigation }) => {
-  const { usuarios, loading, handleEliminar, prepararActualizacion } = useFetchUser();
+  const { usuarios, loading, handleEliminar, fetchUsuarios } = useFetchUser();
+
+  // Recargar usuarios cuando regresemos a esta pantalla
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchUsuarios();
+    }, [])
+  );
 
   const handleEditUser = (user) => {
-    // Navegar a la pantalla de edición (AddUser) con los datos del usuario
-    navigation.navigate('AddUser', { 
-      userToEdit: user,
-      isEditing: true 
+    // Navegar a la pantalla UpdateUser con los datos del usuario
+    navigation.navigate('UpdateUser', { 
+      userToEdit: user
     });
   };
 

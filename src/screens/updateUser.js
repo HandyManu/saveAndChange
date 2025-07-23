@@ -1,35 +1,73 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
   TextInput,
   StyleSheet,
   TouchableOpacity,
-  ScrollView
+  ScrollView,
+  Alert
 } from 'react-native';
-import useFetchUser from '../hooks/useFetchUsers';
 
-const UpdateUser = ({ navigation }) => {
-  const {
-    nombre,
-    edad,
-    correo,
-    setNombre,
-    setEdad,
-    setCorreo,
-    handleActualizar,
-    cancelarEdicion,
-    editingId
-  } = useFetchUser();
+const UpdateUser = ({ navigation, route }) => {
+  const [nombre, setNombre] = useState('');
+  const [edad, setEdad] = useState('');
+  const [correo, setCorreo] = useState('');
+  const [userId, setUserId] = useState(null);
 
-  const handleUpdate = () => {
-    if (editingId) {
-      handleActualizar(editingId);
+  // Cargar los datos del usuario cuando se reciban por parámetros
+  useEffect(() => {
+    if (route.params?.userToEdit) {
+      const user = route.params.userToEdit;
+      setNombre(user.nombre || '');
+      setEdad(user.edad ? user.edad.toString() : '');
+      setCorreo(user.correo || '');
+      setUserId(user.id);
+    }
+  }, [route.params]);
+
+  const handleActualizar = async () => {
+    if (!nombre || !edad || !correo || !userId) {
+      Alert.alert('Error', 'Por favor, completa todos los campos');
+      return;
+    }
+
+    try {
+      const response = await fetch(`https://retoolapi.dev/zZhXYF/movil/${userId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          nombre, 
+          edad: parseInt(edad), 
+          correo 
+        })
+      });
+      
+      if (response.ok) {
+        Alert.alert(
+          'Éxito', 
+          'Usuario actualizado correctamente',
+          [
+            {
+              text: 'OK',
+              onPress: () => {
+                // Regresar a la pantalla de ShowUser
+                navigation.goBack();
+              }
+            }
+          ]
+        );
+      } else {
+        Alert.alert('Error', 'No se pudo actualizar el usuario');
+      }
+    } catch (error) {
+      console.error(error);
+      Alert.alert('Error', 'Ocurrió un error al actualizar el usuario');
     }
   };
 
   const handleCancel = () => {
-    cancelarEdicion();
+    // Regresar a la pantalla anterior (ShowUser)
     navigation.goBack();
   };
 
@@ -62,7 +100,7 @@ const UpdateUser = ({ navigation }) => {
         placeholderTextColor="#A1866F"
       />
 
-      <TouchableOpacity style={styles.button} onPress={handleUpdate}>
+      <TouchableOpacity style={styles.button} onPress={handleActualizar}>
         <Text style={styles.buttonText}>Actualizar</Text>
       </TouchableOpacity>
 

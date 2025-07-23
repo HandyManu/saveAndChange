@@ -159,20 +159,21 @@ const useFetchUser = () => {
     fetchUsuarios();
   }, []);
 
-  return {
-    nombre, setNombre,
-    edad, setEdad,
-    correo, setCorreo,
-    handleGuardar,
-    handleEliminar,
-    handleActualizar,
-    prepararActualizacion,
-    cancelarEdicion,
-    editingId,
-    usuarios, loading,
-    fetchUsuarios,
-    limpiarFormulario
-  };
+  
+return {
+  nombre, setNombre,
+  edad, setEdad,
+  correo, setCorreo,
+  handleGuardar,
+  handleEliminar,
+  handleActualizar,
+  prepararActualizacion,
+  cancelarEdicion,
+  editingId,
+  usuarios, loading,
+  fetchUsuarios,  
+  limpiarFormulario
+};
 };
 
 export default useFetchUser;

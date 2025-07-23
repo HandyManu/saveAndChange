@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'; // 
 import Home from '../screens/home.js'; // Importa la pantalla de Sesión
 import ShowUser from '../screens/showUser.js'; // Importa la pantalla de Sesión
 import AddUser from '../screens/addUser.js'; // Importa la pantalla de Sesión
+import UpdateUser from '../screens/updateUser.js';
 import TabNavigator from './tabNavigation.js'; // Importa el navegador de pestañas
  
 export default function Navigation() {
@@ -20,6 +21,7 @@ export default function Navigation() {
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="ShowUser" component={ShowUser} />
         <Stack.Screen name="AddUsers" component={AddUser} />
+        <Stack.Screen name="UpdateUser" component={UpdateUser} />
         <Stack.Screen name="TabNavigator" component={TabNavigator} />
       </Stack.Navigator>
     </NavigationContainer>
