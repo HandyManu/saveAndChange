@@ -7,6 +7,8 @@ import { Platform } from 'react-native';
 import Home from '../screens/home';
 import ShowUser from '../screens/showUser';
 import AddUser from '../screens/addUser';
+import UpdateUser from '../screens/updateUser'; // 👈 ¡Esta es la clave!
+
  
  
 //creando un objeto Tab utilizando createBottomTabNavigator de la libreria/dependencia instalada
